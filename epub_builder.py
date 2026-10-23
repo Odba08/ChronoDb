@@ -38,7 +38,7 @@ def create_epub(
     for p in passages:
         c_num = p.get("chapter_number", 1)
         c_title = p.get("chapter_title") or f"Capítulo {c_num}"
-        act_title = p.get("act_title") or "Acto I: La Puerta de Hierro y Ceniza"
+        act_title = p.get("act_title") or "Acto I: La Academia"
         
         key = f"cap_{c_num}"
         if key not in capitulos:
@@ -61,7 +61,7 @@ def create_epub(
         capitulos["cap_1"] = {
             "num": 1,
             "title": "Capítulo 1: El Umbral de la Academia",
-            "act": "Acto I: La Puerta de Hierro y Ceniza",
+            "act": "Acto I: La Academia",
             "paragraphs": ["En el umbral de hierro y ceniza de la Academia, Oscar dio su primer paso..."]
         }
 

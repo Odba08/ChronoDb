@@ -124,7 +124,7 @@ def start_game(session_id: str = "partida_001", reiniciar: bool = False):
         chapter_number=1,
         chapter_title="Capítulo 1: El Umbral de la Academia",
         act_number=1,
-        act_title="Acto I: La Puerta de Hierro y Ceniza",
+        act_title="Acto I: La Academia",
         confirmed_facts=[
             "Oscar ingresa como cadete ordinario en la Academia Militar para prepararse en la guerra contra el monarca Ares."
         ],
@@ -238,7 +238,7 @@ def get_game(session_id: str):
         turn_number=max(1, estado.turn_number - 1),
         chapter_number=getattr(estado, "chapter_number", 1),
         chapter_title=getattr(estado, "chapter_title", "Capítulo 1: El Umbral de la Academia"),
-        act_title=getattr(estado, "act_title", "Acto I: La Puerta de Hierro y Ceniza"),
+        act_title=getattr(estado, "act_title", "Acto I: La Academia"),
         narrative=narrativa,
         health=estado.health,
         entropy=estado.entropy,

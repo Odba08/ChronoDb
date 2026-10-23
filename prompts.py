@@ -362,7 +362,7 @@ La historia continúa en su curso humano, militar y temporal. Los misterios de A
 
     act_num = getattr(state, "act_number", 1)
     turns_in_act = getattr(state, "turns_in_act", 1)
-    act_title = getattr(state, "act_title", "Acto I: La Puerta de Hierro y Ceniza")
+    act_title = getattr(state, "act_title", "Acto I: La Academia")
     
     # Determinamos la fase dramática del Acto y la distancia al clímax
     if turns_in_act <= 7:
@@ -377,7 +377,7 @@ La historia continúa en su curso humano, militar y temporal. Los misterios de A
         fase_nombre = "Fase 2: Tensión Creciente y Sospechas (Nudo del Acto)"
         ritmo_instruccion = (
             f"6. RITMO LITERARIO ({fase_nombre}): Estás en el avance {turns_in_act} de {act_title}. "
-            "Las contradicciones sobre Ares, el Reactor Geller o las intenciones de Virginia se intensifican. "
+            "Las contradicciones sobre Ares, los secretos ocultos o las intenciones de Virginia se intensifican. "
             "Si la escena presenta un dilema táctico o moral evidente, puedes proponer opciones; de lo contrario, prioriza la lectura fluida con is_crossroad = false y 'Continuar leyendo...'."
         )
     else:

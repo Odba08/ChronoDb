@@ -63,7 +63,9 @@ class GameState(BaseModel):
     chapter_title: str = "Capítulo 1: El Umbral de la Academia"
     act_number: int = 1
     act_title: str = "Acto I: La Puerta de Hierro y Ceniza"
-    turns_in_chapter: int = 1  # Páginas leídas en el capítulo actual
+    turns_in_chapter: int = 1
+    turns_in_act: int = 1  # Páginas/turnos desarrollados en el acto actual
+    climax_phase: str = "Inmersión Analítica"  # "Inmersión Analítica" | "Tensión Creciente" | "Clímax del Acto"
     
     # Límites absolutos de supervivencia
     health: int = Field(ge=0, le=100, default=100)
@@ -104,7 +106,10 @@ class TurnoClienteResponse(BaseModel):
     turn_number: int
     chapter_number: int = 1
     chapter_title: str = "Capítulo 1: El Umbral de la Academia"
+    act_number: int = 1
     act_title: str = "Acto I: La Puerta de Hierro y Ceniza"
+    turns_in_act: int = 1
+    climax_phase: str = "Inmersión Analítica"
     narrative: str
     health: int
     entropy: int

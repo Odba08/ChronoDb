@@ -364,25 +364,41 @@ Desarrolla esta revelación de forma sobrecogedora, sutil y profunda."""
 La historia continúa en su curso humano, militar y temporal. Los misterios de Ares, la Academia y la civilización perdida se abordan con explicaciones humanas y físicas de causalidad. No fuerces elementos extraterrestres.
 (Claves sutiles recopiladas: {num_keys}/3 necesarias para el enigma cósmico)."""
 
-    turns_in_cap = getattr(state, "turns_in_chapter", 1)
-    if turns_in_cap >= 3:
+    act_num = getattr(state, "act_number", 1)
+    turns_in_act = getattr(state, "turns_in_act", 1)
+    act_title = getattr(state, "act_title", "Acto I: La Puerta de Hierro y Ceniza")
+    
+    # Determinamos la fase dramática del Acto y la distancia al clímax
+    if turns_in_act <= 7:
+        fase_nombre = "Fase 1: Inmersión y Desarrollo Analítico (Apertura del Acto)"
         ritmo_instruccion = (
-            f"6. RITMO LITERARIO (CLÍMAX Y ENCRUCIJADA OBLIGATORIA): Este es el avance {turns_in_cap} de {getattr(state, 'chapter_title', 'este capítulo')}. "
-            "Has alcanzado el punto de clímax decisivo de este capítulo. DEBES OBLIGATORIAMENTE establecer is_crossroad = true "
-            "y proporcionar entre 3 y 4 opciones de acción divergentes (enfoques: 'agresivo', 'sigilo', 'analitico', 'desesperado') "
-            "para que el lector decida cómo actuar y resolver el clímax antes de avanzar al siguiente capítulo."
+            f"6. RITMO LITERARIO ({fase_nombre}): Estás en el avance {turns_in_act} de {act_title}. "
+            "El lector desea una experiencia literaria profunda, analítica y sin interrupciones prematuras. "
+            "Desarrolla la prosa con riqueza descriptiva, introspección táctica de Oscar, dinámicas de escuadra y la atmósfera opresiva de la Academia. "
+            "Establece is_crossroad = false con una única opción 'Continuar leyendo...' para mantener el flujo inmersivo."
+        )
+    elif turns_in_act <= 14:
+        fase_nombre = "Fase 2: Tensión Creciente y Sospechas (Nudo del Acto)"
+        ritmo_instruccion = (
+            f"6. RITMO LITERARIO ({fase_nombre}): Estás en el avance {turns_in_act} de {act_title}. "
+            "Las contradicciones sobre Ares, el Reactor Geller o las intenciones de Virginia se intensifican. "
+            "Si la escena presenta un dilema táctico o moral evidente, puedes proponer opciones; de lo contrario, prioriza la lectura fluida con is_crossroad = false y 'Continuar leyendo...'."
         )
     else:
+        fase_nombre = "Fase 3: Clímax Inminente del Acto (Punto Culminante)"
         ritmo_instruccion = (
-            f"6. RITMO LITERARIO (DESARROLLO DE ESCENA): Este es el avance {turns_in_cap} de 3 en {getattr(state, 'chapter_title', 'este capítulo')}. "
-            "Escribe prosa inmersiva y rica. Establece is_crossroad = false con una única opción 'Continuar leyendo...' para permitir la lectura fluida."
+            f"6. RITMO LITERARIO ({fase_nombre}): Estás en el avance {turns_in_act} de {act_title}. "
+            "El conflicto central de este Acto ha alcanzado su punto más álgido de peligro o revelación. "
+            "Conduce los acontecimientos hacia la encrucijada decisiva. Si la escena llega al punto de no retorno, "
+            "establece is_crossroad = true y ofrece entre 3 y 4 opciones divergentes ('agresivo', 'sigilo', 'analitico', 'desesperado') para definir el desenlace del Acto."
         )
 
     return f"""
 ESTADO ACTUAL
 
-Capítulo: {getattr(state, "chapter_number", 1)}
-Título: {getattr(state, "chapter_title", "Capítulo 1")}
+Acto: {act_title} (Avance {turns_in_act} en este acto)
+Fase dramática: {fase_nombre}
+Escena actual: {getattr(state, "chapter_title", "El Umbral de la Academia")}
 
 Salud: {getattr(state, "health", 100)}/100
 Entropía: {getattr(state, "entropy", 0)}/100

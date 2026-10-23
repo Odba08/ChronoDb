@@ -4,38 +4,41 @@ def clamp(value: int, min_val: int, max_val: int) -> int:
     """Asegura que un número no se pase de sus límites."""
     return max(min_val, min(value, max_val))
 
-CHAPTER_TITLES = {
-    1: "Capítulo 1: El Umbral de la Academia",
-    2: "Capítulo 2: Los Simuladores de Vacío",
-    3: "Capítulo 3: La Jerarquía de las Sombras",
-    4: "Capítulo 4: Las Ruinas Ciclópeas Subterráneas",
-    5: "Capítulo 5: El Secreto del Reactor Geller",
-    6: "Capítulo 6: La Fuga de los Ecos",
-    7: "Capítulo 7: La Alianza de las Cenizas",
-    8: "Capítulo 8: La Fractura Ontológica",
-    9: "Capítulo 9: El Retorno al Umbral (El Despertar Consciente)",
-    10: "Capítulo 10: La Voluntad de las Cenizas",
-    11: "Capítulo 11: Las Profundidades del Abismo",
-    12: "Capítulo 12: El Archivo Olvidado de Ares",
-    13: "Capítulo 13: El Susurro de los Ancestros",
-    14: "Capítulo 14: La Señal de la Flota Fantasma",
-    15: "Capítulo 15: La Puerta de los Ecos"
+# ESTRUCTURA MAESTRA DE LOS 3 ACTOS DE LA NOVELA (ARQUÍMEDES // LIBRO I)
+ACTS_DATA = {
+    1: {
+        "act_number": 1,
+        "title": "Acto I: La Puerta de Hierro y Ceniza",
+        "theme": "El ingreso forzoso a la Academia Ares, pruebas psicotécnicas y biomecánicas con reliquias antiguas, la hostilidad del Instructor Kaelen, rivalidades entre cadetes y el primer contacto clandestino con Virginia.",
+        "climax_threshold": 16, # Número orientativo de avances para desarrollar la inmersión analítica
+    },
+    2: {
+        "act_number": 2,
+        "title": "Acto II: El Velo de la Historia Oficial",
+        "theme": "La exploración de las ruinas ciclópeas y del Reactor Geller bajo la academia. El descubrimiento de la manipulación histórica y las anomalías de causalidad. Alianzas secretas y peligro de purga militar.",
+        "climax_threshold": 18,
+    },
+    3: {
+        "act_number": 3,
+        "title": "Acto III: La Encrucijada de la Causalidad",
+        "theme": "El clímax total del Libro I. La sobrecarga ontológica del reactor, el colapso de la entropía, la revelación del bucle temporal y el despertar consciente.",
+        "climax_threshold": 20,
+    }
 }
 
-def get_chapter_title(chapter_num: int, ai_title: str = None) -> str:
-    if ai_title and len(ai_title.strip()) > 3 and "Capítulo" in ai_title:
-        return ai_title.strip()
-    return CHAPTER_TITLES.get(chapter_num, f"Capítulo {chapter_num}: La Convergencia de los Ecos")
-
-def get_act_title(chapter_num: int) -> str:
-    if chapter_num <= 10:
-        return "Acto I: La Puerta de Hierro y Ceniza"
-    elif chapter_num <= 25:
-        return "Acto II: El Velo de la Historia Oficial"
-    elif chapter_num <= 40:
-        return "Acto III: La Encrucijada de la Causalidad"
+def get_climax_phase(turns_in_act: int, climax_threshold: int) -> tuple[str, str]:
+    """
+    Calcula la fase dramática y la cercanía al clímax dentro del Acto:
+    - Inmersión Analítica: Prosa extensa, atmósfera, psicología de Oscar y Virginia.
+    - Tensión Creciente: Anomalías, sospechas, dilemas crecientes.
+    - Clímax del Acto: Máxima intensidad dramática y gran encrucijada.
+    """
+    if turns_in_act < int(climax_threshold * 0.45):
+        return ("inmersion_analitica", "Inmersión Analítica")
+    elif turns_in_act < int(climax_threshold * 0.85):
+        return ("tension_creciente", "Tensión Creciente")
     else:
-        return "Acto IV: La Convergencia de los Ecos"
+        return ("climax_inminente", "Clímax del Acto")
 
 class GameEngine:
     
@@ -129,67 +132,76 @@ class GameEngine:
             is_game_over = True
             game_over_reason = "Tu mente se fractura bajo la sobrecarga de la entropía causal. El flujo temporal colapsa sobre tu percepción y tus constantes vitales se desvanecen en un eco de realidades incompatibles."
 
-        # 4. GOBERNADOR DE RITMO Y PROGRESIÓN DE CAPÍTULOS
+        # 4. GOBERNADOR DRAMÁTICO POR ACTOS (Acto 1, Acto 2, Acto 3)
         turno_actual = state.turn_number
         state.turn_number += 1
         
-        # Detectar si el jugador acaba de responder a una encrucijada
-        # (Es decir, su elección NO fue la simple continuación de lectura y el turno anterior fue encrucijada)
+        act_num = getattr(state, "act_number", 1)
+        turns_in_act = getattr(state, "turns_in_act", 1)
+        act_info = ACTS_DATA.get(act_num, ACTS_DATA[1])
+        climax_threshold = act_info.get("climax_threshold", 16)
+        
+        # ¿El jugador acaba de tomar una decisión en la encrucijada del clímax?
         prev_was_crossroad = getattr(state, "last_is_crossroad", False)
-        chose_real_option = player_choice.strip().lower() not in ("continuar leyendo...", "continuar", "avanzar página narrativa")
-        turns_in_cap = getattr(state, "turns_in_chapter", 1)
+        chose_real_option = player_choice.strip().lower() not in (
+            "continuar leyendo...", "continuar", "avanzar página narrativa", "continuar leyendo"
+        )
 
-        if (prev_was_crossroad or chose_real_option) and turns_in_cap >= 3:
-            # ¡El clímax del capítulo anterior fue resuelto por el jugador!
-            # Avanzamos al siguiente capítulo automáticamente
-            state.chapter_number = getattr(state, "chapter_number", 1) + 1
-            state.turns_in_chapter = 1  # Comienza el nuevo capítulo
+        # Si el jugador resolvió una encrucijada y ya estábamos en la fase de clímax del acto:
+        if (prev_was_crossroad and chose_real_option) and turns_in_act >= int(climax_threshold * 0.85):
+            # ¡Se consumó la encrucijada del clímax! Avanzamos al siguiente Acto de la historia
+            if act_num < 3:
+                state.act_number = act_num + 1
+            state.turns_in_act = 1
+            act_num = state.act_number
+            act_info = ACTS_DATA.get(act_num, ACTS_DATA[3])
         else:
-            # Seguimos avanzando la narración dentro del capítulo actual
-            state.turns_in_chapter = turns_in_cap + 1
+            state.turns_in_act = turns_in_act + 1
 
-        # Actualizar títulos de acto y capítulo
-        state.act_title = get_act_title(state.chapter_number)
-        state.chapter_title = get_chapter_title(state.chapter_number, getattr(ai_response, "chapter_title", None))
+        state.act_title = act_info["title"]
+        phase_key, phase_label = get_climax_phase(state.turns_in_act, act_info["climax_threshold"])
+        state.climax_phase = phase_label
 
-        # DECISIÓN DE ENCRUCIJADA:
-        # Si llevamos 3 o más avances en el capítulo actual, ¡ES OBLIGATORIO DAR ELECCIONES AL LECTOR!
-        current_turns_in_cap = state.turns_in_chapter
+        # Título de escena / capítulo: se mantiene orgánico sin forzar números arbitrarios
+        if hasattr(ai_response, "chapter_title") and ai_response.chapter_title and len(ai_response.chapter_title.strip()) > 3:
+            state.chapter_title = ai_response.chapter_title.strip()
+        elif not getattr(state, "chapter_title", None):
+            state.chapter_title = f"{state.act_title} • Crónica {state.turns_in_act}"
+
+        # 5. DECISIÓN DE ENCRUCIJADA:
+        # A. Si la IA propuso orgánicamente una encrucijada legítima con opciones divergentes, la respetamos.
+        # B. Si hemos alcanzado el umbral de clímax del acto (turns_in_act >= climax_threshold):
+        #    Se activa la gran encrucijada del Acto.
+        # C. En cualquier otro caso: Lectura inmersiva fluida con "Continuar leyendo...".
         raw_crossroad = getattr(ai_response, "is_crossroad", False)
+        valid_ai_options = [
+            opt for opt in getattr(ai_response, "options", []) 
+            if opt.label.strip().lower() not in ("continuar leyendo...", "continuar", "avanzar página narrativa")
+        ]
 
-        if current_turns_in_cap >= 3:
-            # Clímax del capítulo: Ofrecer 3-4 opciones estratégicas reales
+        if (raw_crossroad and len(valid_ai_options) >= 2) or state.turns_in_act >= climax_threshold:
             is_crossroad = True
-            
-            # Filtrar si la IA devolvió opciones válidas que no sean "continuar leyendo"
-            valid_ai_options = [
-                opt for opt in getattr(ai_response, "options", []) 
-                if opt.label.strip().lower() not in ("continuar leyendo...", "continuar")
-            ]
-            
             if len(valid_ai_options) >= 2:
                 final_options = valid_ai_options
             else:
-                # Opciones tácticas de contingencia perfectamente adaptadas al clímax
                 final_options = [
                     ActionOption(
-                        label="Actuar con determinación táctica y confrontar la situación",
+                        label="Actuar con determinación táctica y confrontar el clímax",
                         approach="agresivo",
-                        risk_level="medio"
+                        risk_level="critico"
                     ),
                     ActionOption(
-                        label="Buscar una ruta alterna en sigilo y coordinar una maniobra con Virginia",
+                        label="Coordinar una maniobra encubierta con Virginia y evaluar la anomalía",
                         approach="sigilo",
-                        risk_level="bajo"
+                        risk_level="medio"
                     ),
                     ActionOption(
-                        label="Analizar los patrones del reactor y descifrar la anomalía temporal",
+                        label="Analizar los registros del reactor y descifrar la verdad ontológica",
                         approach="analitico",
-                        risk_level="medio"
+                        risk_level="bajo"
                     )
                 ]
         else:
-            # Avance fluido de lectura: la prosa se desenvuelve sin interrupción
             is_crossroad = False
             final_options = [
                 ActionOption(
@@ -199,7 +211,7 @@ class GameEngine:
                 )
             ]
 
-        # 5. PERSISTIR ÚLTIMA PANTALLA EN EL ESTADO (Para reanudar al instante)
+        # 6. PERSISTIR ÚLTIMA PANTALLA EN EL ESTADO
         state.last_narrative = ai_response.narrative
         state.last_options = final_options
         state.last_is_crossroad = is_crossroad
@@ -208,23 +220,26 @@ class GameEngine:
         state.is_game_over = is_game_over
         state.game_over_reason = game_over_reason
 
-        # 6. EMPAQUETAR PARA LA PANTALLA (DTO de salida)
+        # 7. EMPAQUETAR PARA LA PANTALLA (DTO de salida)
         return TurnoClienteResponse(
             session_id=state.session_id,
             turn_number=turno_actual,
             chapter_number=getattr(state, "chapter_number", 1),
-            chapter_title=getattr(state, "chapter_title", f"Capítulo {getattr(state, 'chapter_number', 1)}: El Umbral de la Academia"),
-            act_title=getattr(state, "act_title", "Acto I: La Puerta de Hierro y Ceniza"),
+            chapter_title=getattr(state, "chapter_title", f"{state.act_title} • Crónica {state.turns_in_act}"),
+            act_number=state.act_number,
+            act_title=state.act_title,
+            turns_in_act=state.turns_in_act,
+            climax_phase=state.climax_phase,
             narrative=ai_response.narrative,
             health=state.health,
             entropy=state.entropy,
             virginia=state.virginia,
             inventory=state.inventory,
-            lore_ledger=state.lore_ledger,
-            confirmed_facts=getattr(state, "confirmed_facts", []),
-            open_threads=getattr(state, "open_threads", []),
-            active_branch=getattr(state, "active_branch", "Cadete de la Academia"),
-            secret_route_unlocked=getattr(state, "secret_route_unlocked", False),
+            lore_ledger=getattr(state, "lore_ledger", []),
+            confirmed_facts=state.confirmed_facts,
+            open_threads=state.open_threads,
+            active_branch=state.active_branch,
+            secret_route_unlocked=state.secret_route_unlocked,
             is_crossroad=is_crossroad,
             options=final_options,
             is_game_over=is_game_over,

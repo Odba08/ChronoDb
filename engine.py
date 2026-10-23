@@ -8,21 +8,21 @@ def clamp(value: int, min_val: int, max_val: int) -> int:
 ACTS_DATA = {
     1: {
         "act_number": 1,
-        "title": "Acto I: La Puerta de Hierro y Ceniza",
-        "theme": "El ingreso forzoso a la Academia Ares, pruebas psicotécnicas y biomecánicas con reliquias antiguas, la hostilidad del Instructor Kaelen, rivalidades entre cadetes y el primer contacto clandestino con Virginia.",
-        "climax_threshold": 16, # Número orientativo de avances para desarrollar la inmersión analítica
+        "title": "Acto I: La Academia",
+        "theme": "La Academia Militar (Tono: The Will of the Many, Classroom of the Elite, Red Rising). Jerarquías feroces, competición táctica y psicológica entre cadetes. Oscar mantiene perfil bajo analizando fríamente el entorno. Sufre flashbacks involuntarios de las líneas temporales de Ares y despierta un poder latente no comprendido relacionado con el tiempo.",
+        "climax_threshold": 18,
     },
     2: {
         "act_number": 2,
-        "title": "Acto II: El Velo de la Historia Oficial",
-        "theme": "La exploración de las ruinas ciclópeas y del Reactor Geller bajo la academia. El descubrimiento de la manipulación histórica y las anomalías de causalidad. Alianzas secretas y peligro de purga militar.",
-        "climax_threshold": 18,
+        "title": "Acto II: La Investigación y los Laberintos",
+        "theme": "Investigación clandestina en los laberintos ocultos bajo la academia (muy a lo The Will of the Many). Alianzas y rivalidades forjadas en el Acto I (dentro o fuera de la academia). Entrada paulatina en los secretos prohibidos.",
+        "climax_threshold": 20,
     },
     3: {
         "act_number": 3,
-        "title": "Acto III: La Encrucijada de la Causalidad",
-        "theme": "El clímax total del Libro I. La sobrecarga ontológica del reactor, el colapso de la entropía, la revelación del bucle temporal y el despertar consciente.",
-        "climax_threshold": 20,
+        "title": "Acto III: El Clímax Causal",
+        "theme": "Clímax final en todo lo alto. Secretos revelados de la civilización perdida y los viajes en el tiempo. Ares consigue capturar a Virginia y Oscar se encuentra cara a cara consigo mismo.",
+        "climax_threshold": 22,
     }
 }
 

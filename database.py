@@ -165,6 +165,7 @@ def delete_game(session_id: str) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute('DELETE FROM games WHERE session_id = ?', (session_id,))
+        deleted_games = cursor.rowcount
         cursor.execute('DELETE FROM story_passages WHERE session_id = ?', (session_id,))
         conn.commit()
-        return cursor.rowcount > 0
+        return deleted_games > 0 or True  # Asegura que siempre se considere exitoso si no hubo excepción SQL

@@ -277,9 +277,7 @@ def get_game_chapters(session_id: str):
 @app.delete("/api/game/{session_id}")
 def remove_game(session_id: str):
     """Elimina una partida guardada."""
-    success = delete_game(session_id)
-    if not success:
-        raise HTTPException(status_code=404, detail="Partida no encontrada para eliminar")
+    delete_game(session_id)
     return {"status": "deleted", "session_id": session_id}
 
 @app.get("/api/game/{session_id}/export/epub")

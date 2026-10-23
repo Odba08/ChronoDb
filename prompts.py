@@ -364,6 +364,20 @@ Desarrolla esta revelación de forma sobrecogedora, sutil y profunda."""
 La historia continúa en su curso humano, militar y temporal. Los misterios de Ares, la Academia y la civilización perdida se abordan con explicaciones humanas y físicas de causalidad. No fuerces elementos extraterrestres.
 (Claves sutiles recopiladas: {num_keys}/3 necesarias para el enigma cósmico)."""
 
+    turns_in_cap = getattr(state, "turns_in_chapter", 1)
+    if turns_in_cap >= 3:
+        ritmo_instruccion = (
+            f"6. RITMO LITERARIO (CLÍMAX Y ENCRUCIJADA OBLIGATORIA): Este es el avance {turns_in_cap} de {getattr(state, 'chapter_title', 'este capítulo')}. "
+            "Has alcanzado el punto de clímax decisivo de este capítulo. DEBES OBLIGATORIAMENTE establecer is_crossroad = true "
+            "y proporcionar entre 3 y 4 opciones de acción divergentes (enfoques: 'agresivo', 'sigilo', 'analitico', 'desesperado') "
+            "para que el lector decida cómo actuar y resolver el clímax antes de avanzar al siguiente capítulo."
+        )
+    else:
+        ritmo_instruccion = (
+            f"6. RITMO LITERARIO (DESARROLLO DE ESCENA): Este es el avance {turns_in_cap} de 3 en {getattr(state, 'chapter_title', 'este capítulo')}. "
+            "Escribe prosa inmersiva y rica. Establece is_crossroad = false con una única opción 'Continuar leyendo...' para permitir la lectura fluida."
+        )
+
     return f"""
 ESTADO ACTUAL
 
@@ -410,7 +424,7 @@ INSTRUCCIONES PARA ESTE TURNO
 3. Respeta los hechos confirmados y el conocimiento de cada personaje.
 4. Introduce pistas o anomalías únicamente si encajan orgánicamente.
 5. No resuelvas misterios por conveniencia ni anticipes revelaciones.
-6. Ritmo literario: Estás en el avance {getattr(state, "turns_in_chapter", 1)} de este capítulo. Prioriza la lectura fluida (is_crossroad = false con una única opción "Continuar leyendo...") para que el lector disfrute la prosa. Solo propón una encrucijada si el capítulo ha alcanzado un clímax narrativo tras suficiente desarrollo.
+{ritmo_instruccion}
 7. Registra solo cambios de estado justificables.
 8. Devuelve exclusivamente el JSON definido en el prompt de sistema.
 """

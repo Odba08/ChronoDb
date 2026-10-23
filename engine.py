@@ -4,6 +4,39 @@ def clamp(value: int, min_val: int, max_val: int) -> int:
     """Asegura que un número no se pase de sus límites."""
     return max(min_val, min(value, max_val))
 
+CHAPTER_TITLES = {
+    1: "Capítulo 1: El Umbral de la Academia",
+    2: "Capítulo 2: Los Simuladores de Vacío",
+    3: "Capítulo 3: La Jerarquía de las Sombras",
+    4: "Capítulo 4: Las Ruinas Ciclópeas Subterráneas",
+    5: "Capítulo 5: El Secreto del Reactor Geller",
+    6: "Capítulo 6: La Fuga de los Ecos",
+    7: "Capítulo 7: La Alianza de las Cenizas",
+    8: "Capítulo 8: La Fractura Ontológica",
+    9: "Capítulo 9: El Retorno al Umbral (El Despertar Consciente)",
+    10: "Capítulo 10: La Voluntad de las Cenizas",
+    11: "Capítulo 11: Las Profundidades del Abismo",
+    12: "Capítulo 12: El Archivo Olvidado de Ares",
+    13: "Capítulo 13: El Susurro de los Ancestros",
+    14: "Capítulo 14: La Señal de la Flota Fantasma",
+    15: "Capítulo 15: La Puerta de los Ecos"
+}
+
+def get_chapter_title(chapter_num: int, ai_title: str = None) -> str:
+    if ai_title and len(ai_title.strip()) > 3 and "Capítulo" in ai_title:
+        return ai_title.strip()
+    return CHAPTER_TITLES.get(chapter_num, f"Capítulo {chapter_num}: La Convergencia de los Ecos")
+
+def get_act_title(chapter_num: int) -> str:
+    if chapter_num <= 10:
+        return "Acto I: La Puerta de Hierro y Ceniza"
+    elif chapter_num <= 25:
+        return "Acto II: El Velo de la Historia Oficial"
+    elif chapter_num <= 40:
+        return "Acto III: La Encrucijada de la Causalidad"
+    else:
+        return "Acto IV: La Convergencia de los Ecos"
+
 class GameEngine:
     
     @staticmethod
@@ -96,27 +129,67 @@ class GameEngine:
             is_game_over = True
             game_over_reason = "Tu mente se fractura bajo la sobrecarga de la entropía causal. El flujo temporal colapsa sobre tu percepción y tus constantes vitales se desvanecen en un eco de realidades incompatibles."
 
-        # 4. AVANZAR EL TIEMPO Y CAPÍTULO
+        # 4. GOBERNADOR DE RITMO Y PROGRESIÓN DE CAPÍTULOS
         turno_actual = state.turn_number
         state.turn_number += 1
         
-        if hasattr(ai_response, "chapter_title") and ai_response.chapter_title:
-            state.chapter_title = ai_response.chapter_title
-
-        # GOBERNADOR DE RITMO LITERARIO:
-        # Una novela real debe permitir sumergirse en la lectura sin interrumpir al lector cada 5 segundos.
-        # Exigimos al menos 3 avances de lectura continua en el capítulo actual antes de habilitar una encrucijada.
+        # Detectar si el jugador acaba de responder a una encrucijada
+        # (Es decir, su elección NO fue la simple continuación de lectura y el turno anterior fue encrucijada)
+        prev_was_crossroad = getattr(state, "last_is_crossroad", False)
+        chose_real_option = player_choice.strip().lower() not in ("continuar leyendo...", "continuar", "avanzar página narrativa")
         turns_in_cap = getattr(state, "turns_in_chapter", 1)
+
+        if (prev_was_crossroad or chose_real_option) and turns_in_cap >= 3:
+            # ¡El clímax del capítulo anterior fue resuelto por el jugador!
+            # Avanzamos al siguiente capítulo automáticamente
+            state.chapter_number = getattr(state, "chapter_number", 1) + 1
+            state.turns_in_chapter = 1  # Comienza el nuevo capítulo
+        else:
+            # Seguimos avanzando la narración dentro del capítulo actual
+            state.turns_in_chapter = turns_in_cap + 1
+
+        # Actualizar títulos de acto y capítulo
+        state.act_title = get_act_title(state.chapter_number)
+        state.chapter_title = get_chapter_title(state.chapter_number, getattr(ai_response, "chapter_title", None))
+
+        # DECISIÓN DE ENCRUCIJADA:
+        # Si llevamos 3 o más avances en el capítulo actual, ¡ES OBLIGATORIO DAR ELECCIONES AL LECTOR!
+        current_turns_in_cap = state.turns_in_chapter
         raw_crossroad = getattr(ai_response, "is_crossroad", False)
 
-        if raw_crossroad and turns_in_cap >= 3:
-            # Encrucijada legítima tras desarrollo del capítulo
+        if current_turns_in_cap >= 3:
+            # Clímax del capítulo: Ofrecer 3-4 opciones estratégicas reales
             is_crossroad = True
-            final_options = ai_response.options
-            state.chapter_number = getattr(state, "chapter_number", 1) + 1
-            state.turns_in_chapter = 1  # Reiniciar contador para el nuevo capítulo
+            
+            # Filtrar si la IA devolvió opciones válidas que no sean "continuar leyendo"
+            valid_ai_options = [
+                opt for opt in getattr(ai_response, "options", []) 
+                if opt.label.strip().lower() not in ("continuar leyendo...", "continuar")
+            ]
+            
+            if len(valid_ai_options) >= 2:
+                final_options = valid_ai_options
+            else:
+                # Opciones tácticas de contingencia perfectamente adaptadas al clímax
+                final_options = [
+                    ActionOption(
+                        label="Actuar con determinación táctica y confrontar la situación",
+                        approach="agresivo",
+                        risk_level="medio"
+                    ),
+                    ActionOption(
+                        label="Buscar una ruta alterna en sigilo y coordinar una maniobra con Virginia",
+                        approach="sigilo",
+                        risk_level="bajo"
+                    ),
+                    ActionOption(
+                        label="Analizar los patrones del reactor y descifrar la anomalía temporal",
+                        approach="analitico",
+                        risk_level="medio"
+                    )
+                ]
         else:
-            # Lectura fluida: página de novela sin interrupciones
+            # Avance fluido de lectura: la prosa se desenvuelve sin interrupción
             is_crossroad = False
             final_options = [
                 ActionOption(
@@ -125,7 +198,6 @@ class GameEngine:
                     risk_level="bajo"
                 )
             ]
-            state.turns_in_chapter = turns_in_cap + 1
 
         # 5. PERSISTIR ÚLTIMA PANTALLA EN EL ESTADO (Para reanudar al instante)
         state.last_narrative = ai_response.narrative

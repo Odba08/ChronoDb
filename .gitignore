@@ -13,6 +13,8 @@ __pycache__/
 # SQLite Database
 *.db
 *.db-journal
+*.db-shm
+*.db-wal
 
 # Exported Books
 exports/

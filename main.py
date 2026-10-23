@@ -256,6 +256,24 @@ def get_game(session_id: str):
         art_prompt=getattr(estado, "last_art_prompt", None)
     )
 
+@app.get("/api/game/{session_id}/chapters")
+def get_game_chapters(session_id: str):
+    """Devuelve el historial cronológico de capítulos y pasajes para el panel lateral (Moon Reader style)."""
+    passages = get_story_passages(session_id)
+    if not passages:
+        estado = load_game(session_id)
+        if estado and estado.last_narrative:
+            passages = [{
+                "turn_number": estado.turn_number,
+                "act_title": estado.act_title,
+                "chapter_number": estado.chapter_number,
+                "chapter_title": estado.chapter_title,
+                "narrative": estado.last_narrative,
+                "player_choice": "Inicio de la lectura",
+                "created_at": None
+            }]
+    return passages
+
 @app.delete("/api/game/{session_id}")
 def remove_game(session_id: str):
     """Elimina una partida guardada."""

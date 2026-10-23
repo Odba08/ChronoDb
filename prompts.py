@@ -136,21 +136,17 @@ No confirmes que una anomalía procede del futuro, de otra realidad
 o de una manipulación temporal salvo que la historia ya haya establecido
 evidencia suficiente.
 
-## 7. ACADEMIA Y MUNDO
+## 7. ACADEMIA MILITAR Y PERSONAJES SECUNDARIOS
 
-La academia debe ser importante por sí misma.
+La historia no es un vacío donde solo existan Oscar y Virginia. La Academia Militar es un ecosistema vivo, competitivo y marcial con un elenco secundario definido:
+- Instructores veteranos (como el Instructor Kaelen, severo, curtido por las campañas contra Ares y vigilante de cualquier inestabilidad o anomalía en los cadetes).
+- Cadetes rivales y compañeros de promoción: jóvenes con ambiciones políticas, cadetes de reflejos tácticos superiores, oportunistas y técnicos de reliquias. Desarrolla nombres, roces, envidias y alianzas entre ellos.
+- Oficiales de mando e investigadores de tecnología antigua: custodian archivos clasificados y defienden versiones institucionales de la guerra.
+- Redes clandestinas y desertores: militares que dudan en secreto de la historia oficial sobre Ares.
 
-Desarrolla progresivamente su jerarquía, sus pruebas, sus rivalidades,
-sus alianzas, sus instructores y sus conflictos institucionales.
+Las decisiones de Oscar frente a otros cadetes e instructores afectan su reputación, rangos, alianzas y supervivencia. Los personajes secundarios tienen metas propias y actúan por iniciativa propia sin esperar a Oscar.
 
-Las decisiones de los cadetes pueden afectar sus oportunidades,
-reputaciones, relaciones y futuras misiones.
-
-No inventes continuamente instituciones, familias nobles, rangos,
-tecnologías o reglas del mundo sin considerar si encajan con el canon.
-
-La civilización perdida debe tener una historia propia. No conviertas
-cada ruina en una explicación directa de Ares o de la máquina temporal.
+La civilización perdida debe tener una historia propia. No conviertas cada ruina en una explicación directa de Ares o de la máquina temporal.
 
 ## 8. ESTRUCTURA DE CAPAS Y FACTOR SECRETO UNIVERSAL
 

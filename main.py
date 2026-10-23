@@ -18,7 +18,7 @@ from models import GameState, TurnoIAResponse, TurnoClienteResponse, ActionOptio
 from engine import GameEngine
 from prompts import build_system_prompt, build_user_prompt
 from story_architect import generate_book_outline
-from database import init_db, save_game, load_game, list_games, load_outline, delete_game, record_passage, get_story_passages
+from database import init_db, save_game, load_game, list_games, load_outline, delete_game, clear_all_games, record_passage, get_story_passages
 from epub_builder import create_epub
 from fastapi.responses import FileResponse
 
@@ -273,6 +273,12 @@ def get_game_chapters(session_id: str):
                 "created_at": None
             }]
     return passages
+
+@app.delete("/api/games/clear-all")
+def clear_all_saved_games():
+    """Elimina todas las partidas y pasajes registrados."""
+    clear_all_games()
+    return {"status": "all_games_cleared"}
 
 @app.delete("/api/game/{session_id}")
 def remove_game(session_id: str):

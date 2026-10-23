@@ -169,3 +169,12 @@ def delete_game(session_id: str) -> bool:
         cursor.execute('DELETE FROM story_passages WHERE session_id = ?', (session_id,))
         conn.commit()
         return deleted_games > 0 or True  # Asegura que siempre se considere exitoso si no hubo excepción SQL
+
+def clear_all_games() -> bool:
+    """Elimina todas las partidas, escaletas y pasajes registrados."""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM games')
+        cursor.execute('DELETE FROM story_passages')
+        conn.commit()
+        return True

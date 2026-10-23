@@ -318,3 +318,20 @@ def export_game_epub(session_id: str):
         filename=f"Arquimedes_La_Voluntad_de_las_Cenizas_{session_id}.epub",
         media_type="application/epub+zip"
     )
+
+@app.get("/api/book/download/complete")
+@app.get("/api/game/export/full-book")
+def download_complete_book():
+    """Descarga directa de la edición íntegra oficial de Arquímedes // Libro I: La Voluntad de las Cenizas en EPUB estándar."""
+    export_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "exports")
+    file_path = os.path.join(export_dir, "Arquimedes_Libro_I_La_Voluntad_de_las_Cenizas_Completo.epub")
+    
+    if not os.path.exists(file_path):
+        from canonical_novel_builder import build_complete_canonical_novel
+        build_complete_canonical_novel()
+
+    return FileResponse(
+        path=file_path,
+        filename="Arquimedes_Libro_I_La_Voluntad_de_las_Cenizas_Completo.epub",
+        media_type="application/epub+zip"
+    )
